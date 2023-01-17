@@ -3,3 +3,4 @@ secret.json
 serviceAccountKey.json
 motorsportspotter.backend*
 .vscode/
+certs/
