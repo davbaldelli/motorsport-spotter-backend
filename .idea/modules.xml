@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/motorsportspotter.backend.iml" filepath="$PROJECT_DIR$/.idea/motorsportspotter.backend.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/motorsport-spotter-backend.iml" filepath="$PROJECT_DIR$/.idea/motorsport-spotter-backend.iml" />
     </modules>
   </component>
 </project>

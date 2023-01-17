@@ -53,6 +53,18 @@ func (e EventView) ToEntity() models.Event {
 	}
 }
 
+func DbEventFromModel(event models.Event) EventDb {
+	return EventDb{
+		Id:             event.Id,
+		Name:           event.Name,
+		TrackId:        event.TrackId,
+		ChampionshipId: event.ChampionshipId,
+		StartDate:      event.StartDate,
+		EndDate:        event.EndDate,
+		Image:          event.Image,
+	}
+}
+
 func (l DbEventList) ConvertAll() []models.Event {
 	var events []models.Event
 	for _, eventDb := range l {

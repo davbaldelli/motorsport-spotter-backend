@@ -32,14 +32,16 @@ func (e EventsRepositoryImpl) GetIncomingEvents() ([]models.Event, error) {
 }
 
 func (e EventsRepositoryImpl) InsertEvent(event models.Event) error {
-	if res := e.Db.Create(&event); res.Error != nil {
+	dbEvent := entities.DbEventFromModel(event)
+	if res := e.Db.Create(&dbEvent); res.Error != nil {
 		return res.Error
 	}
 	return nil
 }
 
 func (e EventsRepositoryImpl) UpdateEvent(event models.Event) error {
-	if res := e.Db.Updates(&event); res.Error != nil {
+	dbEvent := entities.DbEventFromModel(event)
+	if res := e.Db.Updates(&dbEvent); res.Error != nil {
 		return res.Error
 	}
 	return nil
