@@ -1,8 +1,10 @@
 package http
 
 import (
+	"crypto/tls"
 	"github.com/gorilla/mux"
 	"github.com/rs/cors"
+	"golang.org/x/crypto/acme/autocert"
 	"log"
 	"net/http"
 )
@@ -40,9 +42,28 @@ func (w Web) Listen() {
 	c := cors.New(cors.Options{
 		AllowedOrigins:   []string{"*"},
 		AllowCredentials: true,
+		AllowedHeaders:   []string{"*"},
 	})
 
 	handler := c.Handler(router)
 
-	log.Fatal(http.ListenAndServe(":7151", handler))
+	certManager := autocert.Manager{
+		Prompt:     autocert.AcceptTOS,
+		HostPolicy: autocert.HostWhitelist("progtw.davidebaldelli.it", "spotter.davidebaldelli.it"),
+		Cache:      autocert.DirCache("certs"),
+	}
+
+	server := &http.Server{
+		Addr:    ":7151",
+		Handler: handler,
+		TLSConfig: &tls.Config{
+			GetCertificate: certManager.GetCertificate,
+		},
+	}
+
+	log.Printf("Serving http/https for domains: progtw.davidebaldelli.it")
+
+	log.Fatal(server.ListenAndServeTLS("", ""))
+
+	//log.Fatal(http.ListenAndServe(":7151", handler))
 }
