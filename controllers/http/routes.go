@@ -49,7 +49,7 @@ func (w Web) Listen() {
 
 	certManager := autocert.Manager{
 		Prompt:     autocert.AcceptTOS,
-		HostPolicy: autocert.HostWhitelist("progtw.davidebaldelli.it", "spotter.davidebaldelli.it"),
+		HostPolicy: autocert.HostWhitelist("api.acmodrepository.com", "spotter.davidebaldelli.it"),
 		Cache:      autocert.DirCache("certs"),
 	}
 
