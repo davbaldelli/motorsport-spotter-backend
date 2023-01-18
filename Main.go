@@ -6,8 +6,9 @@ import (
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"log"
-	"motorsportspotter.backend/controllers"
-	"motorsportspotter.backend/controllers/http"
+	"motorsportspotter.backend/handlers"
+	"motorsportspotter.backend/handlers/gateways"
+	"motorsportspotter.backend/handlers/middlewares"
 	repo "motorsportspotter.backend/repositories/mysql"
 	"os"
 )
@@ -18,15 +19,29 @@ type Credentials struct {
 	Host     string `json:"host"`
 }
 
+type Secret struct {
+	Secret string
+}
+
 func main() {
 
 	var cred Credentials
 
-	if jsonFile, err := os.ReadFile("credentials.json"); err != nil {
+	if credFile, err := os.ReadFile("credentials.json"); err != nil {
 		log.Fatal("no credentials file")
 	} else {
-		if err := json.Unmarshal(jsonFile, &cred); err != nil {
+		if err := json.Unmarshal(credFile, &cred); err != nil {
 			log.Fatal("err parsing json")
+		}
+	}
+
+	var secret Secret
+
+	if secretFile, err := os.ReadFile("secret.json"); err != nil {
+		log.Fatal("no secret file")
+	} else {
+		if err := json.Unmarshal(secretFile, &secret); err != nil {
+			log.Fatal("err pasrsing json")
 		}
 	}
 
@@ -39,13 +54,15 @@ func main() {
 		log.Print("Connected to database successfully")
 	}
 
-	router := controllers.Web{
-		ChampCtrl:    http.ChampionshipControllerImpl{Repo: repo.ChampionshipRepoImpl{Db: dbase}},
-		TracksCtrl:   http.TracksControllerImpl{Repo: repo.TracksRepositoryImpl{Db: dbase}},
-		EventCtrl:    http.EventControllerImpl{Repo: repo.EventsRepositoryImpl{Db: dbase}},
-		SessionsCtrl: http.SessionsControllerImpl{Repo: repo.SessionRepositoryImpl{Db: dbase}},
-		NewsCtrl:     http.NewsControllerImpl{Repo: repo.NewsRepositoryImpl{Db: dbase}},
-		NationCtrl:   http.NationsControllerImpl{Repo: repo.NationsRepositoryImpl{Db: dbase}},
+	router := handlers.Router{
+		ChampGate:    gateways.ChampionshipGatewayImpl{Repo: repo.ChampionshipRepoImpl{Db: dbase}},
+		TracksGate:   gateways.TracksGatewayImpl{Repo: repo.TracksRepositoryImpl{Db: dbase}},
+		EventGate:    gateways.EventGatewayImpl{Repo: repo.EventsRepositoryImpl{Db: dbase}},
+		SessionsGate: gateways.SessionsGatewayImpl{Repo: repo.SessionRepositoryImpl{Db: dbase}},
+		NewsGate:     gateways.NewsGatewayImpl{Repo: repo.NewsRepositoryImpl{Db: dbase}},
+		NationGate:   gateways.NationsGatewayImpl{Repo: repo.NationsRepositoryImpl{Db: dbase}},
+		UserGate:     gateways.UsersGatewayImpl{Repo: repo.UserRepositoryImpl{Db: dbase}, Secret: secret.Secret},
+		AuthMidl:     middlewares.AuthorizationHandlerImpl{Secret: secret.Secret},
 	}
 
 	router.Listen()

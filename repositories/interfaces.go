@@ -36,3 +36,8 @@ type NationsRepository interface {
 type NewsRepository interface {
 	GetAllNews() ([]models.News, error)
 }
+
+type UserRepository interface {
+	Login(user models.User) (models.User, error)
+	SignIn(user models.User) (models.User, error)
+}
