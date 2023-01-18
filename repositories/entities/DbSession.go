@@ -33,7 +33,7 @@ func (s DbSession) ToModel() models.Session {
 }
 
 func (l DbSessionList) ConvertAll() []models.Session {
-	var sessions []models.Session
+	var sessions = make([]models.Session, 0)
 	for _, sessionDb := range l {
 		sessions = append(sessions, sessionDb.ToModel())
 	}
