@@ -6,10 +6,11 @@ import (
 
 type DbEventView struct {
 	DbEvent
-	ChampionshipName string
-	ChampionshipYear int
-	TrackName        string
-	Sessions         []DbSession `gorm:"foreignKey:EventId"`
+	ChampionshipName       string
+	ChampionshipPrettyName string
+	ChampionshipYear       int
+	TrackName              string
+	Sessions               []DbSession `gorm:"foreignKey:EventId"`
 }
 
 type DbEvent struct {
@@ -43,8 +44,9 @@ func (e DbEventView) ToModel() models.Event {
 		EndDate:        e.EndDate,
 		Image:          e.Image,
 		Championship: models.Championship{
-			Name: e.ChampionshipName,
-			Year: e.ChampionshipYear,
+			Name:       e.ChampionshipName,
+			PrettyName: e.ChampionshipPrettyName,
+			Year:       e.ChampionshipYear,
 		},
 		Track: models.Track{
 			Name: e.TrackName,
