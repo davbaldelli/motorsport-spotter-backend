@@ -4,7 +4,7 @@ import (
 	"motorsportspotter.backend/models"
 )
 
-type SessionDb struct {
+type DbSession struct {
 	Id           int `gorm:"primaryKey"`
 	Name         string
 	EventId      int
@@ -14,13 +14,13 @@ type SessionDb struct {
 	DurationLaps int
 }
 
-type DbSessionList []SessionDb
+type DbSessionList []DbSession
 
-func (SessionDb) TableName() string {
+func (DbSession) TableName() string {
 	return "sessions"
 }
 
-func (s SessionDb) ToEntity() models.Session {
+func (s DbSession) ToModel() models.Session {
 	return models.Session{
 		Id:           s.Id,
 		Name:         s.Name,
@@ -35,7 +35,7 @@ func (s SessionDb) ToEntity() models.Session {
 func (l DbSessionList) ConvertAll() []models.Session {
 	var sessions []models.Session
 	for _, sessionDb := range l {
-		sessions = append(sessions, sessionDb.ToEntity())
+		sessions = append(sessions, sessionDb.ToModel())
 	}
 	return sessions
 }

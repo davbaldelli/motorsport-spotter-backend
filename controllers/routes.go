@@ -1,4 +1,4 @@
-package http
+package controllers
 
 import (
 	"crypto/tls"
@@ -15,6 +15,7 @@ type Web struct {
 	EventCtrl    EventController
 	SessionsCtrl SessionsController
 	NewsCtrl     NewsController
+	NationCtrl   NationsController
 }
 
 func (w Web) Listen() {
@@ -25,19 +26,21 @@ func (w Web) Listen() {
 	router.HandleFunc("/api/championships/update", w.ChampCtrl.UPDATEChampionship).Methods("POST", "OPTIONS")
 
 	router.HandleFunc("/api/tracks", w.TracksCtrl.GETAllTracks).Methods("GET")
-	router.HandleFunc("/api/tracks/add", w.TracksCtrl.POSTNewTrack).Methods("POST", "OPTIONS")
-	router.HandleFunc("/api/tracks/update", w.TracksCtrl.UPDATETrack).Methods("POST", "OPTIONS")
+	router.HandleFunc("/api/tracks/add", w.TracksCtrl.POSTNewTrack).Methods("POST")
+	router.HandleFunc("/api/tracks/update", w.TracksCtrl.UPDATETrack).Methods("POST")
 
 	router.HandleFunc("/api/events", w.EventCtrl.GETAllEvents).Methods("GET")
 	router.HandleFunc("/api/events/incoming", w.EventCtrl.GETIncomingEvents).Methods("GET")
-	router.HandleFunc("/api/events/add", w.EventCtrl.POSTNewEvent).Methods("POST", "OPTIONS")
-	router.HandleFunc("/api/events/update", w.EventCtrl.UPDATEEvent).Methods("POST", "OPTIONS")
+	router.HandleFunc("/api/events/add", w.EventCtrl.POSTNewEvent).Methods("POST")
+	router.HandleFunc("/api/events/update", w.EventCtrl.UPDATEEvent).Methods("POST")
 
 	router.HandleFunc("/api/sessions", w.SessionsCtrl.GETAllSessions).Methods("GET")
-	router.HandleFunc("/api/sessions/add", w.SessionsCtrl.POSTNewSession).Methods("POST", "OPTIONS")
-	router.HandleFunc("/api/sessions/update", w.SessionsCtrl.UPDATESession).Methods("POST", "OPTIONS")
+	router.HandleFunc("/api/sessions/add", w.SessionsCtrl.POSTNewSession).Methods("POST")
+	router.HandleFunc("/api/sessions/update", w.SessionsCtrl.UPDATESession).Methods("POST")
 
 	router.HandleFunc("/api/news", w.NewsCtrl.GETAllNews).Methods("GET")
+
+	router.HandleFunc("/api/nations", w.NationCtrl.GETAllNations).Methods("GET")
 
 	c := cors.New(cors.Options{
 		AllowedOrigins:   []string{"*"},
@@ -46,10 +49,9 @@ func (w Web) Listen() {
 	})
 
 	handler := c.Handler(router)
-
 	certManager := autocert.Manager{
 		Prompt:     autocert.AcceptTOS,
-		HostPolicy: autocert.HostWhitelist("api.acmodrepository.com", "spotter.davidebaldelli.it"),
+		HostPolicy: autocert.HostWhitelist("spotter.davidebaldelli.it"),
 		Cache:      autocert.DirCache("certs"),
 	}
 

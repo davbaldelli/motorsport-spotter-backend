@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-type NewsDb struct {
+type DbNews struct {
 	Id       int
 	Title    string
 	Subtitle string
@@ -15,13 +15,13 @@ type NewsDb struct {
 	Image    string
 }
 
-type DbNewsList []NewsDb
+type DbNewsList []DbNews
 
-func (NewsDb) TableName() string {
+func (DbNews) TableName() string {
 	return "news"
 }
 
-func (n NewsDb) ToEntity() models.News {
+func (n DbNews) ToModel() models.News {
 	return models.News{
 		Id:       n.Id,
 		Title:    n.Title,
@@ -36,7 +36,7 @@ func (n NewsDb) ToEntity() models.News {
 func (l DbNewsList) ConvertAll() []models.News {
 	var news []models.News
 	for _, newsDb := range l {
-		news = append(news, newsDb.ToEntity())
+		news = append(news, newsDb.ToModel())
 	}
 	return news
 }

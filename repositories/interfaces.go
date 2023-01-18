@@ -29,6 +29,10 @@ type SessionsRepository interface {
 	UpdateSession(session models.Session) error
 }
 
+type NationsRepository interface {
+	GetAllNations() ([]models.Nation, error)
+}
+
 type NewsRepository interface {
 	GetAllNews() ([]models.News, error)
 }

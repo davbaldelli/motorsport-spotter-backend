@@ -1,4 +1,4 @@
-package http
+package controllers
 
 import "net/http"
 
@@ -29,4 +29,8 @@ type SessionsController interface {
 
 type NewsController interface {
 	GETAllNews(http.ResponseWriter, *http.Request)
+}
+
+type NationsController interface {
+	GETAllNations(http.ResponseWriter, *http.Request)
 }

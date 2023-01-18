@@ -12,7 +12,7 @@ type ChampionshipRepoImpl struct {
 }
 
 func (r ChampionshipRepoImpl) GetAllChampionships() ([]models.Championship, error) {
-	var dbChamps []entities.ChampionshipDb
+	var dbChamps []entities.DbChampionship
 	if result := r.Db.Find(&dbChamps); result.Error != nil {
 		return nil, result.Error
 	} else if result.RowsAffected == 0 {

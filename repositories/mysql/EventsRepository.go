@@ -12,7 +12,7 @@ type EventsRepositoryImpl struct {
 }
 
 func (e EventsRepositoryImpl) GetAllEvents() ([]models.Event, error) {
-	var dbEvents []entities.EventView
+	var dbEvents []entities.DbEventView
 	if result := e.Db.Order("start_date").Preload("Sessions").Find(&dbEvents); result.Error != nil {
 		return nil, result.Error
 	} else if result.RowsAffected == 0 {
@@ -22,7 +22,7 @@ func (e EventsRepositoryImpl) GetAllEvents() ([]models.Event, error) {
 }
 
 func (e EventsRepositoryImpl) GetIncomingEvents() ([]models.Event, error) {
-	var dbEvents []entities.EventView
+	var dbEvents []entities.DbEventView
 	if result := e.Db.Order("start_date").Where("start_date >= CURDATE()").Preload("Sessions").Find(&dbEvents); result.Error != nil {
 		return nil, result.Error
 	} else if result.RowsAffected == 0 {

@@ -6,6 +6,7 @@ import (
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"log"
+	"motorsportspotter.backend/controllers"
 	"motorsportspotter.backend/controllers/http"
 	repo "motorsportspotter.backend/repositories/mysql"
 	"os"
@@ -38,12 +39,13 @@ func main() {
 		log.Print("Connected to database successfully")
 	}
 
-	router := http.Web{
+	router := controllers.Web{
 		ChampCtrl:    http.ChampionshipControllerImpl{Repo: repo.ChampionshipRepoImpl{Db: dbase}},
 		TracksCtrl:   http.TracksControllerImpl{Repo: repo.TracksRepositoryImpl{Db: dbase}},
 		EventCtrl:    http.EventControllerImpl{Repo: repo.EventsRepositoryImpl{Db: dbase}},
 		SessionsCtrl: http.SessionsControllerImpl{Repo: repo.SessionRepositoryImpl{Db: dbase}},
 		NewsCtrl:     http.NewsControllerImpl{Repo: repo.NewsRepositoryImpl{Db: dbase}},
+		NationCtrl:   http.NationsControllerImpl{Repo: repo.NationsRepositoryImpl{Db: dbase}},
 	}
 
 	router.Listen()

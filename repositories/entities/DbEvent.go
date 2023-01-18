@@ -4,15 +4,15 @@ import (
 	"motorsportspotter.backend/models"
 )
 
-type EventView struct {
-	EventDb
+type DbEventView struct {
+	DbEvent
 	ChampionshipName string
 	ChampionshipYear int
 	TrackName        string
-	Sessions         []SessionDb `gorm:"foreignKey:EventId"`
+	Sessions         []DbSession `gorm:"foreignKey:EventId"`
 }
 
-type EventDb struct {
+type DbEvent struct {
 	Id             int `gorm:"primaryKey"`
 	Name           string
 	TrackId        int
@@ -20,20 +20,20 @@ type EventDb struct {
 	StartDate      string
 	EndDate        string
 	Image          string
-	Sessions       []SessionDb `gorm:"foreignKey:EventId"`
+	Sessions       []DbSession `gorm:"foreignKey:EventId"`
 }
 
-type DbEventList []EventView
+type DbEventList []DbEventView
 
-func (EventDb) TableName() string {
+func (DbEvent) TableName() string {
 	return "events"
 }
 
-func (EventView) TableName() string {
+func (DbEventView) TableName() string {
 	return "events_view"
 }
 
-func (e EventView) ToEntity() models.Event {
+func (e DbEventView) ToModel() models.Event {
 	return models.Event{
 		Id:             e.Id,
 		Name:           e.Name,
@@ -53,8 +53,8 @@ func (e EventView) ToEntity() models.Event {
 	}
 }
 
-func DbEventFromModel(event models.Event) EventDb {
-	return EventDb{
+func DbEventFromModel(event models.Event) DbEvent {
+	return DbEvent{
 		Id:             event.Id,
 		Name:           event.Name,
 		TrackId:        event.TrackId,
@@ -68,7 +68,7 @@ func DbEventFromModel(event models.Event) EventDb {
 func (l DbEventList) ConvertAll() []models.Event {
 	var events []models.Event
 	for _, eventDb := range l {
-		events = append(events, eventDb.ToEntity())
+		events = append(events, eventDb.ToModel())
 	}
 	return events
 }

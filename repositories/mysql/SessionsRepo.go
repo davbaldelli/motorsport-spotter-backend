@@ -12,7 +12,7 @@ type SessionRepositoryImpl struct {
 }
 
 func (s SessionRepositoryImpl) GetAllSessions() ([]models.Session, error) {
-	var dbSessions []entities.SessionDb
+	var dbSessions []entities.DbSession
 	if result := s.Db.Find(&dbSessions); result.Error != nil {
 		return nil, result.Error
 	} else if result.RowsAffected == 0 {

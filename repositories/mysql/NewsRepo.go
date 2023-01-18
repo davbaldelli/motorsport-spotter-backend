@@ -12,7 +12,7 @@ type NewsRepositoryImpl struct {
 }
 
 func (r NewsRepositoryImpl) GetAllNews() ([]view.News, error) {
-	var dbNews []entities.NewsDb
+	var dbNews []entities.DbNews
 	if result := r.Db.Find(&dbNews); result.Error != nil {
 		return nil, result.Error
 	} else if result.RowsAffected == 0 {

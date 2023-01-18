@@ -4,9 +4,9 @@ import (
 	"motorsportspotter.backend/models"
 )
 
-type DbChampionshipList []ChampionshipDb
+type DbChampionshipList []DbChampionship
 
-type ChampionshipDb struct {
+type DbChampionship struct {
 	Id         int
 	Name       string
 	PrettyName string
@@ -16,11 +16,11 @@ type ChampionshipDb struct {
 	LiveStream string
 }
 
-func (ChampionshipDb) TableName() string {
+func (DbChampionship) TableName() string {
 	return "championships"
 }
 
-func (c ChampionshipDb) ToEntity() models.Championship {
+func (c DbChampionship) ToModel() models.Championship {
 	return models.Championship{
 		Id:         c.Id,
 		Name:       c.Name,
@@ -35,7 +35,7 @@ func (c ChampionshipDb) ToEntity() models.Championship {
 func (a DbChampionshipList) ConvertAll() []models.Championship {
 	var championships []models.Championship
 	for _, champDb := range a {
-		championships = append(championships, champDb.ToEntity())
+		championships = append(championships, champDb.ToModel())
 	}
 	return championships
 }
