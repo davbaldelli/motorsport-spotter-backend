@@ -10,6 +10,7 @@ type DbEventView struct {
 	ChampionshipPrettyName string
 	ChampionshipYear       int
 	TrackName              string
+	TrackCommonName        string
 	Sessions               []DbSession `gorm:"foreignKey:EventId"`
 }
 
@@ -49,7 +50,8 @@ func (e DbEventView) ToModel() models.Event {
 			Year:       e.ChampionshipYear,
 		},
 		Track: models.Track{
-			Name: e.TrackName,
+			Name:       e.TrackName,
+			CommonName: e.TrackCommonName,
 		},
 		Sessions: DbSessionList(e.Sessions).ConvertAll(),
 	}
