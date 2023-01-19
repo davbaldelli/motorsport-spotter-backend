@@ -10,6 +10,7 @@ type DbSession struct {
 	EventId      int
 	Date         string
 	Time         string
+	Timezone     string
 	DurationMin  int
 	DurationLaps int
 }
@@ -27,6 +28,7 @@ func (s DbSession) ToModel() models.Session {
 		EventId:      s.EventId,
 		Date:         s.Date,
 		Time:         s.Time,
+		Timezone:     s.Timezone,
 		DurationMin:  s.DurationMin,
 		DurationLaps: s.DurationLaps,
 	}
