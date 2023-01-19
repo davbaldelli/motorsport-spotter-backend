@@ -9,6 +9,7 @@ type DbEventView struct {
 	ChampionshipName       string
 	ChampionshipPrettyName string
 	ChampionshipYear       int
+	ChampionshipLogo       string
 	TrackName              string
 	TrackCommonName        string
 	Sessions               []DbSession `gorm:"foreignKey:EventId"`
@@ -48,6 +49,7 @@ func (e DbEventView) ToModel() models.Event {
 			Name:       e.ChampionshipName,
 			PrettyName: e.ChampionshipPrettyName,
 			Year:       e.ChampionshipYear,
+			Logo:       e.ChampionshipLogo,
 		},
 		Track: models.Track{
 			Name:       e.TrackName,
