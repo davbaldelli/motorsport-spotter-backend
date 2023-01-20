@@ -7,5 +7,6 @@ type Track struct {
 	Image        string `json:"image"`
 	Logo         string `json:"logo"`
 	LocationName string `json:"locationName"`
+	NationCode   string `json:"nationCode"`
 	Nation       Nation `json:"nation"`
 }

@@ -49,6 +49,7 @@ func (t DbTrackView) ToModel() models.Track {
 		Image:        t.Image,
 		Logo:         t.Logo,
 		LocationName: t.LocationName,
+		NationCode:   t.NationCode,
 		Nation: models.Nation{
 			Code: t.NationCode,
 			Name: t.NationName,
