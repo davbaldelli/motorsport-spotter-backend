@@ -59,7 +59,6 @@ func main() {
 		TracksGate:   gateways.TracksGatewayImpl{Repo: repo.TracksRepositoryImpl{Db: dbase}},
 		EventGate:    gateways.EventGatewayImpl{Repo: repo.EventsRepositoryImpl{Db: dbase}},
 		SessionsGate: gateways.SessionsGatewayImpl{Repo: repo.SessionRepositoryImpl{Db: dbase}},
-		NewsGate:     gateways.NewsGatewayImpl{Repo: repo.NewsRepositoryImpl{Db: dbase}},
 		NationGate:   gateways.NationsGatewayImpl{Repo: repo.NationsRepositoryImpl{Db: dbase}},
 		UserGate:     gateways.UsersGatewayImpl{Repo: repo.UserRepositoryImpl{Db: dbase}, Secret: secret.Secret},
 		AuthMidl:     middlewares.AuthorizationHandlerImpl{Secret: secret.Secret},

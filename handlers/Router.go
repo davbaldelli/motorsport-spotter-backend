@@ -15,7 +15,6 @@ type Router struct {
 	TracksGate   TracksGateway
 	EventGate    EventsGateway
 	SessionsGate SessionsGateway
-	NewsGate     NewsGateway
 	NationGate   NationsGateway
 	UserGate     UsersGateway
 	AuthMidl     AuthorizationMiddleware
@@ -46,8 +45,6 @@ func (w Router) Listen() {
 
 	router.HandleFunc("/api/login", w.UserGate.Login).Methods("POST")
 	router.HandleFunc("/api/signin", w.AuthMidl.Authentication(w.AuthMidl.Authorization(w.UserGate.SignIn, adminOnly))).Methods("POST")
-
-	router.HandleFunc("/api/news", w.AuthMidl.Authentication(w.NewsGate.GETAllNews)).Methods("GET")
 
 	router.HandleFunc("/api/nations", w.AuthMidl.Authentication(w.NationGate.GETAllNations)).Methods("GET")
 

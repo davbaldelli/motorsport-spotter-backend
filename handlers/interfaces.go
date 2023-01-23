@@ -30,10 +30,6 @@ type SessionsGateway interface {
 	UPDATESession(http.ResponseWriter, *http.Request)
 }
 
-type NewsGateway interface {
-	GETAllNews(http.ResponseWriter, *http.Request)
-}
-
 type NationsGateway interface {
 	GETAllNations(http.ResponseWriter, *http.Request)
 }
