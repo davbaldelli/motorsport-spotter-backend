@@ -18,6 +18,7 @@ type DbEventView struct {
 type DbEvent struct {
 	Id             int `gorm:"primaryKey"`
 	Name           string
+	Description    string
 	TrackId        int
 	ChampionshipId int
 	StartDate      string
@@ -40,6 +41,7 @@ func (e DbEventView) ToModel() models.Event {
 	return models.Event{
 		Id:             e.Id,
 		Name:           e.Name,
+		Description:    e.Description,
 		TrackId:        e.TrackId,
 		ChampionshipId: e.ChampionshipId,
 		StartDate:      e.StartDate,
@@ -63,6 +65,7 @@ func DbEventFromModel(event models.Event) DbEvent {
 	return DbEvent{
 		Id:             event.Id,
 		Name:           event.Name,
+		Description:    event.Description,
 		TrackId:        event.TrackId,
 		ChampionshipId: event.ChampionshipId,
 		StartDate:      event.StartDate,

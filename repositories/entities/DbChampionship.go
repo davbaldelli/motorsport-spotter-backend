@@ -7,13 +7,14 @@ import (
 type DbChampionshipList []DbChampionship
 
 type DbChampionship struct {
-	Id         int
-	Name       string
-	PrettyName string
-	Year       int
-	Image      string
-	Logo       string
-	LiveStream string
+	Id          int
+	Name        string
+	PrettyName  string
+	Year        int
+	Description string
+	Image       string
+	Logo        string
+	LiveStream  string
 }
 
 func (DbChampionship) TableName() string {
@@ -22,13 +23,14 @@ func (DbChampionship) TableName() string {
 
 func (c DbChampionship) ToModel() models.Championship {
 	return models.Championship{
-		Id:         c.Id,
-		Name:       c.Name,
-		PrettyName: c.PrettyName,
-		Year:       c.Year,
-		Image:      c.Image,
-		Logo:       c.Logo,
-		LiveStream: c.LiveStream,
+		Id:          c.Id,
+		Name:        c.Name,
+		PrettyName:  c.PrettyName,
+		Year:        c.Year,
+		Description: c.Description,
+		Image:       c.Image,
+		Logo:        c.Logo,
+		LiveStream:  c.LiveStream,
 	}
 }
 

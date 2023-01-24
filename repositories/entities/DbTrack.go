@@ -8,6 +8,7 @@ type DbTrack struct {
 	Id           int
 	Name         string
 	CommonName   string
+	Description  string
 	Image        string
 	Logo         string
 	LocationName string
@@ -34,6 +35,7 @@ func DbTrackFromModel(track models.Track) DbTrack {
 		Id:           track.Id,
 		Name:         track.Name,
 		CommonName:   track.CommonName,
+		Description:  track.Description,
 		Image:        track.Image,
 		Logo:         track.Logo,
 		LocationName: track.LocationName,
@@ -46,6 +48,7 @@ func (t DbTrackView) ToModel() models.Track {
 		Id:           t.Id,
 		Name:         t.Name,
 		CommonName:   t.CommonName,
+		Description:  t.Description,
 		Image:        t.Image,
 		Logo:         t.Logo,
 		LocationName: t.LocationName,
