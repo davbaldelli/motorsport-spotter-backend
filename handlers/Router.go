@@ -8,6 +8,7 @@ import (
 	"log"
 	"motorsportspotter.backend/models"
 	"net/http"
+	"sync"
 )
 
 type Router struct {
@@ -63,7 +64,7 @@ func (w Router) Listen() {
 	}
 
 	server := &http.Server{
-		Addr:    ":7151",
+		Addr:    ":443",
 		Handler: handler,
 		TLSConfig: &tls.Config{
 			GetCertificate: certManager.GetCertificate,
@@ -71,8 +72,39 @@ func (w Router) Listen() {
 	}
 
 	log.Printf("Serving :7151 for domains: spotter.davidebaldelli.it, home.davidebaldelli.it")
+	/*
+		server2 := &http.Server{
+			Addr:    ":7151",
+			Handler: handler,
+			TLSConfig: &tls.Config{
+				GetCertificate: certManager.GetCertificate,
+			},
+		}
+	*/
+	var wg sync.WaitGroup
 
-	log.Fatal(server.ListenAndServeTLS("", ""))
+	wg.Add(3)
+
+	log.Printf("Serving :6316 for domains: home.davidebaldelli.it , api.acmodrepository.com")
+
+	go func() {
+		defer wg.Done()
+		log.Fatal(server.ListenAndServeTLS("", ""))
+	}()
+
+	go func() {
+		defer wg.Done()
+		// serve HTTP, which will redirect automatically to HTTPS
+		h := certManager.HTTPHandler(nil)
+		log.Fatal(http.ListenAndServe(":http", h))
+	}()
+	/*
+		go func() {
+			defer wg.Done()
+			log.Fatal(server2.ListenAndServeTLS("", ""))
+		}()
+	*/
+	wg.Wait()
 
 	//log.Fatal(http.ListenAndServe(":7151", handler))
 }
