@@ -84,25 +84,25 @@ func (w Router) Listen() {
 	wg.Add(3)
 
 	/*
+			go func() {
+				defer wg.Done()
+				log.Fatal(server.ListenAndServeTLS("", ""))
+			}()
+
 		go func() {
 			defer wg.Done()
-			log.Fatal(server.ListenAndServeTLS("", ""))
+			// serve HTTP, which will redirect automatically to HTTPS
+			h := certManager.HTTPHandler(nil)
+			log.Fatal(http.ListenAndServe(":http", h))
 		}()
 	*/
-	go func() {
-		defer wg.Done()
-		// serve HTTP, which will redirect automatically to HTTPS
-		h := certManager.HTTPHandler(nil)
-		log.Fatal(http.ListenAndServe(":http", h))
-	}()
-
 	go func() {
 		defer wg.Done()
 		log.Fatal(server2.ListenAndServeTLS("", ""))
 	}()
 
 	log.Printf("Serving :7151 for domains: spotter.davidebaldelli.it, home.davidebaldelli.it")
-	
+
 	wg.Wait()
 
 	//log.Fatal(http.ListenAndServe(":7151", handler))
