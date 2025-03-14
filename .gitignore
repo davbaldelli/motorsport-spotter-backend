@@ -4,3 +4,4 @@ serviceAccountKey.json
 motorsportspotter.backend*
 .vscode/
 certs/
+.env

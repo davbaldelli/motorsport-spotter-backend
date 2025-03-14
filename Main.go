@@ -1,8 +1,8 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
+	"github.com/joho/godotenv"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"log"
@@ -17,6 +17,7 @@ type Credentials struct {
 	Username string `json:"username"`
 	Password string `json:"password"`
 	Host     string `json:"host"`
+	DbName   string `json:"dbName"`
 }
 
 type Secret struct {
@@ -25,27 +26,45 @@ type Secret struct {
 
 func main() {
 
+	if err := godotenv.Load(); err != nil {
+		log.Fatal("Error loading .env file")
+	}
+
 	var cred Credentials
 
-	if credFile, err := os.ReadFile("credentials.json"); err != nil {
-		log.Fatal("no credentials file")
+	if dbUsername := os.Getenv("DB_USERNAME"); dbUsername == "" {
+		log.Fatal("missing DB_USERNAME in env")
 	} else {
-		if err := json.Unmarshal(credFile, &cred); err != nil {
-			log.Fatal("err parsing json")
-		}
+		cred.Username = dbUsername
+	}
+
+	if dbPassword := os.Getenv("DB_PASSWORD"); dbPassword == "" {
+		log.Fatal("missing DB_PASSWORD in env")
+	} else {
+		cred.Password = dbPassword
+	}
+
+	if dbName := os.Getenv("DB_DATABASE"); dbName == "" {
+		log.Fatal("missing DB_DATABASE in env")
+	} else {
+		cred.DbName = dbName
+	}
+
+	if dbHost := os.Getenv("DB_HOST"); dbHost == "" {
+		log.Fatal("missing DB_HOST in env")
+	} else {
+		cred.Host = dbHost
 	}
 
 	var secret Secret
 
-	if secretFile, err := os.ReadFile("secret.json"); err != nil {
-		log.Fatal("no secret file")
+	if secretKey := os.Getenv("SECRET_KEY"); secretKey == "" {
+		log.Fatal("missing SECRET_KEY in env")
 	} else {
-		if err := json.Unmarshal(secretFile, &secret); err != nil {
-			log.Fatal("err pasrsing json")
-		}
+		secret.Secret = secretKey
 	}
 
-	dsn := fmt.Sprintf("%v:%v@tcp(%v:3306)/%v?charset=utf8mb4&loc=Local", cred.Username, cred.Password, cred.Host, "motorsport_spotter")
+	dsn := fmt.Sprintf("%v:%v@tcp(%v:3306)/%v?charset=utf8mb4&loc=Local", cred.Username, cred.Password, cred.Host, cred.DbName)
 	dbase, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 
 	if err != nil {

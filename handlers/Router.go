@@ -49,6 +49,12 @@ func (w Router) Listen() {
 
 	router.HandleFunc("/api/nations", w.AuthMidl.Authentication(w.NationGate.GETAllNations)).Methods("GET")
 
+	certManager := autocert.Manager{
+		Prompt:     autocert.AcceptTOS,
+		HostPolicy: autocert.HostWhitelist("spotter.davidebaldelli.it", "home.davidebaldelli.it"),
+		Cache:      autocert.DirCache("certs"),
+	}
+
 	c := cors.New(cors.Options{
 		AllowedOrigins:   []string{"*"},
 		AllowCredentials: true,
@@ -57,11 +63,6 @@ func (w Router) Listen() {
 
 	handler := c.Handler(router)
 
-	certManager := autocert.Manager{
-		Prompt:     autocert.AcceptTOS,
-		HostPolicy: autocert.HostWhitelist("spotter.davidebaldelli.it", "home.davidebaldelli.it"),
-		Cache:      autocert.DirCache("certs"),
-	}
 	/*
 		server := &http.Server{
 			Addr:    ":443",
@@ -70,35 +71,32 @@ func (w Router) Listen() {
 				GetCertificate: certManager.GetCertificate,
 			},
 		}
+
+
 	*/
 
-	server2 := &http.Server{
+	server := &http.Server{
 		Addr:    ":7151",
 		Handler: handler,
 		TLSConfig: &tls.Config{
 			GetCertificate: certManager.GetCertificate,
 		},
 	}
+
 	var wg sync.WaitGroup
 
 	wg.Add(3)
 
-	/*
-			go func() {
-				defer wg.Done()
-				log.Fatal(server.ListenAndServeTLS("", ""))
-			}()
-
-		go func() {
-			defer wg.Done()
-			// serve HTTP, which will redirect automatically to HTTPS
-			h := certManager.HTTPHandler(nil)
-			log.Fatal(http.ListenAndServe(":http", h))
-		}()
-	*/
 	go func() {
 		defer wg.Done()
-		log.Fatal(server2.ListenAndServeTLS("", ""))
+		log.Fatal(server.ListenAndServeTLS("", ""))
+	}()
+
+	go func() {
+		defer wg.Done()
+		// serve HTTP, which will redirect automatically to HTTPS
+		h := certManager.HTTPHandler(nil)
+		log.Fatal(http.ListenAndServe(":http", h))
 	}()
 
 	log.Printf("Serving :7151 for domains: spotter.davidebaldelli.it, home.davidebaldelli.it")
