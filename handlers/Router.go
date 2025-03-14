@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"crypto/tls"
 	"github.com/gorilla/mux"
 	"github.com/rs/cors"
 	"golang.org/x/crypto/acme/autocert"
@@ -63,24 +62,10 @@ func (w Router) Listen() {
 
 	handler := c.Handler(router)
 
-	/*
-		server := &http.Server{
-			Addr:    ":443",
-			Handler: handler,
-			TLSConfig: &tls.Config{
-				GetCertificate: certManager.GetCertificate,
-			},
-		}
-
-
-	*/
-
 	server := &http.Server{
-		Addr:    ":7151",
-		Handler: handler,
-		TLSConfig: &tls.Config{
-			GetCertificate: certManager.GetCertificate,
-		},
+		Addr:      ":443",
+		Handler:   handler,
+		TLSConfig: certManager.TLSConfig(),
 	}
 
 	var wg sync.WaitGroup
@@ -90,13 +75,6 @@ func (w Router) Listen() {
 	go func() {
 		defer wg.Done()
 		log.Fatal(server.ListenAndServeTLS("", ""))
-	}()
-
-	go func() {
-		defer wg.Done()
-		// serve HTTP, which will redirect automatically to HTTPS
-		h := certManager.HTTPHandler(nil)
-		log.Fatal(http.ListenAndServe(":http", h))
 	}()
 
 	log.Printf("Serving :7151 for domains: spotter.davidebaldelli.it, home.davidebaldelli.it")

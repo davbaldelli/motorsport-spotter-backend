@@ -34,7 +34,7 @@ services:
   dashboard:
     build: .
     ports:
-      - "7151:7151"
+      - "443:443"
       - "80:80"
     depends_on:
       mysql:
